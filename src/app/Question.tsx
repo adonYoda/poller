@@ -9,8 +9,10 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import Item from "./Item";
+import { putAnswers } from "./Slices/pollerSlice";
 import { IPollerResponse, IItem, IAnswer } from "./Types";
 
 interface Props {
@@ -19,57 +21,30 @@ interface Props {
 
 const Question: React.FC<Props> = ({ data }) => {
   const questions = data.questions;
-  const [answers, setAnswers] = useState<IAnswer[]>([]);
+  
+  const [page, setPage] = useState<number>(0);
 
-  const handlerSetAnswers = (
-    idItem: number,
-    optionPayload: number | string
-  ) => {
-    typeof optionPayload === "string" &&
-      setAnswers([{ questionId: idItem, text: optionPayload }]);
-    typeof optionPayload === "number" &&
-      setAnswers([{ questionId: idItem, options: [optionPayload] }]);
-    console.log(answers);
-  };
+  
 
-  //   const handlerSetAnswers = (idItem: number, optionId: number | string ) => {
-  //     const index = answers.findIndex((el) => el.questionId === idItem)
-  //     if(index<0){
-  //      typeof optionId ===  "number" && setAnswers([{questionId: idItem, options:[optionId]}])
-  //      typeof optionId ===  "string" && setAnswers([{questionId: idItem, text: optionId}])
-  //      console.log(answers);
-  //     }
-  //     setAnswers()
-  // const indexOptions = (answers[index].options!).find((el) => el === optionId)
-  // if(indexOptions!<0){
-  // const optionsNew = [answers[index].options!.push(optionId as number)]
-  // answers[index] = { ...answers[index], options: [...optionsNew ] }
-  // console.log(answers);
-  // }
 
-  // const optionsNew = [answers[index].options!.push(optionId as number)]
-  // answers[index] = { ...answers[index], options: [...optionsNew ] }
-  // const handleVisible = useCallback((index: number) => {
-  //     titles[index] = { ...titles[index], visible: !titles[index].visible };
-  //     setTitles(prev => [...prev]);
-  // }, [headers])
-
-  // }
 
   return (
     <Container
       sx={{
         height: "content",
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#ffffff",
         display: "flex",
         flexDirection: "column",
+        marginTop: "20px",
+        marginBottom: "20px",
+        borderRadius: "10px",
       }}
     >
       <Box>
         <AppBar
           position="sticky"
           color="transparent"
-          sx={{ top: 0, bottom: "auto" }}
+          sx={{ marginTop: "20px", bottom: "auto" }}
         >
           <Toolbar>
             <Typography>
@@ -81,13 +56,17 @@ const Question: React.FC<Props> = ({ data }) => {
           </Toolbar>
         </AppBar>
       </Box>
-      {questions.map((dataItem: IItem, index: number) => (
+
+      <Item dataItem={questions[page]} index={page} />
+
+      {/* {questions.map((dataItem: IItem, index: number) => (
         <Item
           key={index}
           dataItem={dataItem}
-          handlerSetAnswers={handlerSetAnswers}
+          handlerState={handlerState}
+          
         />
-      ))}
+      ))} */}
       <FormControl sx={{ m: 3 }} component="fieldset" variant="standard">
         <FormLabel component="legend">
           В какой ситуации возникают трудности?
@@ -100,12 +79,38 @@ const Question: React.FC<Props> = ({ data }) => {
         />
       </FormControl>
 
-      {/* <Box sx={{ width: "100%", display: "flex", flexDirection: "row", justifyContent:"space-between"}} >
-          <Button variant="contained">Назад</Button>
-          <Button variant="outlined">Вперед</Button>
-        </Box>
-         */}
-      <Button variant="contained">Отправить</Button>
+      <Box
+        sx={{
+          width: "100%",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
+      >
+        <Button
+          onClick={() => {
+            if (page > 0) setPage((prev) => prev - 1);
+          }}
+          variant="contained"
+        >
+          Назад
+        </Button>
+        <Button
+          onClick={() => {
+            if (page < questions.length - 1) setPage((prev) => prev + 1);
+          }}
+          variant="contained"
+        >
+          Вперед
+        </Button>
+      </Box>
+
+      <Button
+        sx={{ width: "100%", display: "flex", margin: "20px auto" }}
+        variant="contained"
+      >
+        Отправить
+      </Button>
     </Container>
   );
 };

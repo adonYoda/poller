@@ -1,73 +1,69 @@
 export const data = {
-  questions: [
+  "questions": [
     {
-      id: 1234,
-      position: 0,
-      text: "Тест?",
-      type: "radio",
-      options: [
-        {
-          id: 11,
-          text: "Да",
-        },
-        {
-          id: 12,
-          text: "Нет",
-        },
-      ],
+        "id": 1,
+        "position": 0,
+        "text_ru": "Сколько вам лет?",
+        "text_uz": "Сколько вам лет?",
+        "text_en": "Сколько вам лет?",
+        "question_type": "open",
+        "options": []
     },
     {
-      id: 1235,
-      position: 1,
-      text: "Выберите один или несколько вариантов:",
-      type: "checkbox",
-      options: [
-        {
-          id: 13,
-          text: "Лево",
-        },
-        {
-          id: 14,
-          text: "Право",
-        },
-        {
-          id: 15,
-          text: "Верх",
-        },
-        {
-          id: 16,
-          text: "Низ",
-        },
-      ],
+        "id": 2,
+        "position": 1,
+        "text_ru": "Выберите один или несколько вариантов",
+        "text_uz": "Выберите один или несколько вариантов",
+        "text_en": "Выберите один или несколько вариантов",
+        "question_type": "checkbox",
+        "options": [
+            {
+                "id": 1,
+                "text_ru": "Один",
+                "text_en": "Один",
+                "text_uz": "Один"
+            },
+            {
+                "id": 2,
+                "text_ru": "Два",
+                "text_en": "Два",
+                "text_uz": "Два"
+            },
+            {
+                "id": 3,
+                "text_ru": "Три",
+                "text_en": "Три",
+                "text_uz": "Три"
+            }
+        ]
     },
     {
-      id: 1236,
-      position: 2,
-      text: "Сколько вам лет?",
-      type: "open",
-      options: [
-        {
-            id: 17,
-            text: 'Открытый текст'
-        }
-      ],
-    },
-    {
-        id: 1237,
-        position: 3,
-        text: "Что вы видите на картинке?",
-        type: "image",
-        url: 'https://surlybikes.com/uploads/bikes/surly-ice-cream-truck-fat-bike-blue-side-BK3492-800x600.jpg',
-        options: [
-          {
-            id: 18,
-            text: "Табурет",
-          },
-          {
-            id: 19,
-            text: "Велосипед",
-          },
-        ],
-      },
-  ],
+        "id": 3,
+        "position": 2,
+        "text_ru": "Сколько?",
+        "text_uz": "Сколько?",
+        "text_en": "Сколько?",
+        "question_type": "radio",
+        "options": [
+            {
+                "id": 4,
+                "text_ru": "Один",
+                "text_en": "Один",
+                "text_uz": "Один"
+            },
+            {
+                "id": 5,
+                "text_ru": "Два",
+                "text_en": "Два",
+                "text_uz": "Два"
+            },
+            {
+                "id": 6,
+                "text_ru": "Три",
+                "text_en": "Три",
+                "text_uz": "Три"
+            }
+        ]
+    }
+]
 };

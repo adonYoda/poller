@@ -1,2 +1,2 @@
 export const firstPage = "/" 
-export const baseUrl = "/"
+export const baseUrl = "https://pollerprod.herokuapp.com"

@@ -13,5 +13,5 @@ const pollerSlice = createSlice({
 })
 
 
-export const {} = pollerSlice.actions
+export const {putAnswers} = pollerSlice.actions
 export default pollerSlice.reducer

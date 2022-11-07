@@ -4,19 +4,22 @@ export interface IPollerResponse {
 export interface IItem {
   id: number;
   position: number;
-  text: string;
-  type: string;
+  text_ru: string;
+  question_type: string;
   options: IOptions[];
   url?: string;
 }
 export interface IOptions {
   id: number;
-  text: string;
+  text_ru: string;
 }
  export interface IAnswer {
   questionId: number;
-  options?: number[];
+  optionsId?: number[];
   text?: string;
  }
 
+// export interface IAnswer{
+//   answers: []
+// }
  

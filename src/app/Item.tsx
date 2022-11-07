@@ -7,8 +7,10 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import React, { useState } from "react";
-import { IItem } from "./Types";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { putAnswers } from "./Slices/pollerSlice";
+import { IAnswer, IItem } from "./Types";
 
 const MyButton = styled.div`
   width: 100%;
@@ -20,80 +22,152 @@ const MyButton = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
+const MyImage = styled.img`
+  border: 1px black solid;
+  border-radius: 10px;
+  max-width: 100%;
+  margin: 20px;
+  padding: 10px;
+  background-color: #45b2ff68;
+`;
+const MyDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+`;
 
 interface Props {
   dataItem: IItem;
-  handlerSetAnswers: (idItem: number, optionId: number| string)=> void;
+  index: number;
+  //handlerState: (questionId: number, optionId: number | string) => void;
 }
 
-const Item: React.FC<Props> = ({ dataItem, handlerSetAnswers }) => {
-   const [question, setQuestion] = useState({})
+const Item: React.FC<Props> = ({ dataItem, index }) => {
+  const dispatch = useDispatch();
 
+  const [answer, setAnswer] = useState<IAnswer>({
+    questionId: 0,
+    optionsId: [],
+    text: "",
+  });
+  const [options, setOptions] = useState<number[]>([]);
 
+  const handlerChangeAnswer = (
+    questionId: number,
+    value: number | string,
+    type?: string
+  ) => {
+    // if (typeof value === "string")
+    //   setAnswer({ questionId: questionId, text: value });
+    // if (typeof value === "number" && type === "radio")
+    //   setAnswer({ questionId: questionId, optionsId: [value] });
+    // if (typeof value === "number" && type === "checkbox") {
+    //   const index = answer.optionsId!.indexOf(value);
+    //   if (index >= 0) {
+    //     setAnswer({
+    //       questionId: questionId,
+    //       optionsId: answer.optionsId!.splice(index, 1),
+    //     });
+    //   } else {
+    //     // setAnswer((prev)=> {...prev, {
+    //     //   questionId: questionId,
+    //     //   optionsId: (answer.optionsId as number[])!.push(value)}
+    //     // });
+    //   }
+    // }
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(putAnswers(answer));
+    };
+  }, []);
 
   return (
     <Box
       sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
     >
-      <FormControl sx={{ m: 3, width: "60%"}} component="fieldset" variant="standard">
-        <FormLabel component="legend">
-          {dataItem.position + 1}. {dataItem.text}
-        
+      <FormControl
+        sx={{ m: 3, maxwidth: "60%", minWidth: "100%" }}
+        component="fieldset"
+        variant="standard"
+      >
+        <FormLabel component="legend" color="primary" focused={false} >
+          {dataItem.position + 1}. {dataItem.text_ru}
         </FormLabel>
-        {dataItem.type === "image" && <div><img src={dataItem.url} /></div>}
+        {dataItem.question_type === "image" && <MyImage src={dataItem.url} />}
         {dataItem.options &&
-          dataItem.type === "checkbox" &&
-          dataItem.options.map((option, i) => (
-            <MyButton >
-              <Typography sx={{ m: 1 }} variant="body1">
-                {option.text}
-              </Typography>
-              <Checkbox onChange = { (e)=>
-               handlerSetAnswers(dataItem.id, option.id)
-              } />
-            </MyButton>
-          ))}
-        {dataItem.options &&
-          dataItem.type === "radio" &&
+          dataItem.question_type === "checkbox" &&
           dataItem.options.map((option, i) => (
             <MyButton>
               <Typography sx={{ m: 1 }} variant="body1">
-                {option.text}
+                {option.text_ru}
               </Typography>
-             <input type="radio" name="radio" value={option.text} onChange = { ()=>
-                handlerSetAnswers(dataItem.id, option.id)
-              } />
+              <Checkbox
+                onChange={(e) => {
+                  handlerChangeAnswer(dataItem.id, option.id, "checkbox");
+                }}
+              />
             </MyButton>
           ))}
-           {dataItem.options &&
-          dataItem.type === "open" &&
+        {dataItem.options &&
+          dataItem.question_type === "radio" &&
           dataItem.options.map((option, i) => (
-            <FormControl sx={{ m: 3, width: "100%" }} component="fieldset" variant="standard">
-            <FormLabel component="legend">
-            {option.text}
-            </FormLabel>
-            <TextField
-              id="outlined-multiline-static"
-              multiline
-              rows={4}
-              defaultValue="напишите что-то..."
-              onChange = { (e)=>
-                handlerSetAnswers(dataItem.id, e.target.value)
-              }
-            />
-          </FormControl>
-          ))}
-          {dataItem.options &&
-          dataItem.type === "image" &&
-          dataItem.options.map((option, i) => (
-            <>
+            <MyButton>
               <Typography sx={{ m: 1 }} variant="body1">
-                {option.text}
+                {option.text_ru}
               </Typography>
-             <input type="radio" name="radio" value={option.text}  onChange = { ()=>
-                handlerSetAnswers(dataItem.id, option.id)
-              } />
-             </>
+              <input
+                type="radio"
+                name="radio"
+                value={option.text_ru}
+                onChange={() => {
+                  handlerChangeAnswer(dataItem.id, option.id, "radio");
+                }}
+              />
+            </MyButton>
+          ))}
+        {dataItem.options &&
+          dataItem.question_type === "open" &&
+          //dataItem.options.map((option, i) => (
+            <FormControl
+              sx={{ margin: "0 auto", width: "100%"}}
+              component="fieldset"
+              variant="standard"
+            >
+              
+              <TextField
+                sx={{ m: "0 auto", width: "100%"}}
+                multiline
+                rows={4}
+                defaultValue= "Напишите что-нибудь..."
+                onChange={(e) => {
+                  handlerChangeAnswer(dataItem.id, e.target.value, "input");
+                }}
+              />
+            </FormControl>
+          // )
+          // )
+          }
+        {dataItem.options &&
+          dataItem.question_type === "image" &&
+          dataItem.options.map((option, i) => (
+            <MyDiv>
+              <Typography sx={{ m: 1 }} variant="body1">
+                {option.text_ru}
+              </Typography>
+              <input
+                style={{ margin: "0" }}
+                type="radio"
+                name="radio"
+                value={option.text_ru}
+                onChange={() => {
+                  handlerChangeAnswer(dataItem.id, option.id, "radio");
+                }}
+              />
+            </MyDiv>
           ))}
       </FormControl>
     </Box>

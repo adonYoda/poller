@@ -1,20 +1,18 @@
-import { createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { baseUrl } from "../constants";
 
 export const pollerApi = createApi({
-    baseQuery: fetchBaseQuery({
-        baseUrl: baseUrl
-    }),
-    endpoints: (build) => ({
-        getPoller: build.query({
-            query: (args)=> {
-                return {
-                    url: ``,
-                    method: "GET",
-                }
-            }
-        })
-    })
-})
+    reducerPath: 'pollerApi',
+  baseQuery: fetchBaseQuery({
+    baseUrl: baseUrl,
+  }),
+  endpoints: (builder) => ({
+    getPoller: builder.query({
+      query: (id) => ({ url:`/api/questions/${id}/`,
+      method: 'GET'})
+       }),
+  }),
+});
 
-export const {useGetPollerQuery} = pollerApi;
+export const { useGetPollerQuery } = pollerApi;
+
