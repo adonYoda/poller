@@ -1,9 +1,8 @@
 import styled from "@emotion/styled";
 import { Box, CircularProgress, Container } from "@mui/material";
 import { useState } from "react";
-import { Link, Route, Routes, useParams } from "react-router-dom";
+import { Route, Routes, useParams, useSearchParams } from "react-router-dom";
 import { useGetPollerQuery } from "./app/API/pollerApi";
-import { firstPage } from "./app/constants";
 import LinearDeterminate from "./app/LinearDeterminate";
 import Question from "./app/Question";
 import { data } from "./app/TEMP/TEMP";
@@ -21,8 +20,14 @@ const MyApp = styled(Container)`
 `;
 
 function App() {
-  const [id, setId] = useState(1);
-  const { data = [], isLoading } = useGetPollerQuery(id);
+  //const params = useParams();
+  //const useSearchParams  = ReactRouterDOM.useSearchParams;
+  const [searchParams, setSearchParams] = useSearchParams();
+  console.log(searchParams.get("id"));
+  //console.log(params.id);
+
+  const [id, setId] = useState();
+  const { data = [], isLoading } = useGetPollerQuery(searchParams.get("id"));
   const hardData = data;
 
   return isLoading ? (
